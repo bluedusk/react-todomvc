@@ -14,14 +14,23 @@
     <script type="text/babel">
         //components
         //Container Component: Wrapper for all components
-        const TODOMVC = () => {
-          return (
-          <div>
-            <TODOMVC_TITLE />
-            <TODOMVC_INPUT />
-            <TODOMVC_ITEMLIST />
-          </div>
-          );
+        class TODOMVC extends React.Component {
+
+          constructor(props){
+            super(props);
+            this.state = {
+              TODO_ITEMS: ["task1", "task2", "task3","task4"]
+            }
+          }
+          render() {
+            return (
+            <div>
+              <TODOMVC_TITLE />
+              <TODOMVC_INPUT />
+              <TODOMVC_ITEMLIST todoList={this.state.TODO_ITEMS}/>
+            </div>
+            );
+          }
         }
 
         //title component
@@ -30,10 +39,15 @@
         //input component
         class TODOMVC_INPUT extends React.Component {
           render(){
-            return <input onChange={this.onchangeHandler}/>;
+            return <input onKeyDown={this.onKeyDownHandler} onChange={this.onchangeHandler}/>;
           }
           onchangeHandler(event){
             console.log(event.target.value);
+          }
+          onKeyDownHandler(event){
+            if (event.keyCode == 13) {
+              console.log(event.keyCode);
+            }
           }
         }
 
@@ -44,19 +58,28 @@
             return (
               <div>
               <input type="checkbox"/>
-              <label htmlFor="">1123123</label>
+              <label htmlFor="">{this.props.todoItem}</label>
               </div>
             )
           }
         }
 
-
         // list of items component
         class TODOMVC_ITEMLIST extends React.Component{
+
+          ItemList(){
+            return this.props.todoList.map((item) => {
+                  return(
+                    <TODOLIST_ITEM key={item} todoItem={item}/>
+                  );
+                })
+          }
+
+
           render(){
               return (
                 <div>
-                <TODOLIST_ITEM />
+                  {this.ItemList()} //should be this.ItemList()
                 </div>
               )
           }
