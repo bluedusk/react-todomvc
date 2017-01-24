@@ -21,15 +21,30 @@
             this.state = {
               TODO_ITEMS: ["task1", "task2", "task3","task4"]
             }
+            // This binding is necessary to make `this` work in the callback
+            this.addTodoList = this.addTodoList.bind(this);
           }
 
-          
+          addTodoList(newItem){console.log(1);
+
+
+                 console.log(this.props);
+                 let TODO_ITEMS = this.state.TODO_ITEMS;
+                 TODO_ITEMS.push(newItem);
+                 console.log(TODO_ITEMS);
+                 this.setState({TODO_ITEMS});
+
+
+            // console.log(this);
+
+          }
 
           render() {
+
             return (
             <div>
               <TODOMVC_TITLE />
-              <TODOMVC_INPUT />
+              <TODOMVC_INPUT  onAddTodoList={this.addTodoList}/>
               <TODOMVC_ITEMLIST todoList={this.state.TODO_ITEMS}/>
             </div>
             );
@@ -41,15 +56,22 @@
 
         //input component
         class TODOMVC_INPUT extends React.Component {
+
           render(){
-            return <input onKeyDown={this.onKeyDownHandler} onChange={this.onchangeHandler}/>;
+            return <input
+            onKeyDown={event => this.onKeyDownHandler(event)}
+            onChange={this.onchangeHandler}/>;
           }
           onchangeHandler(event){
+            // test event handler
             console.log(event.target.value);
           }
           onKeyDownHandler(event){
             if (event.keyCode == 13) {
-              console.log(event.keyCode);
+              //TODO: Update list value in state
+              console.log(this);
+              this.props.onAddTodoList(event.target.value);
+              //console.log(event.keyCode);
             }
           }
         }
@@ -78,9 +100,10 @@
                 })
           }
           render(){
+              //should be this.ItemList()
               return (
                 <div>
-                  {this.ItemList()} //should be this.ItemList()
+                  {this.ItemList()}
                 </div>
               )
           }
